@@ -43,6 +43,9 @@ jobs:
           # Notes are added once by the job below, not once per target.
           generate_release_notes: false
 
+  # release-please writes the changelog into the release body. This adds what
+  # every release page needs under it: how to install, and the checksums. A
+  # rerun replaces its own sections instead of stacking a second copy.
   notes:
     name: release notes
     runs-on: ubuntu-latest
@@ -50,7 +53,32 @@ jobs:
     needs: binaries
     permissions:
       contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.ref_name }}
+      REPO: ${{ github.repository }}
     steps:
-      - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          generate_release_notes: true
+      - name: Install and checksum sections
+        run: |
+          gh release download "$TAG" -R "$REPO" -p '*.sha256' -D sums
+          gh release view "$TAG" -R "$REPO" --json body --jq .body | sed '/^## Install$/,$d' > notes.md
+          cat >> notes.md <<EOF
+
+          ## Install
+
+          \`\`\`sh
+          curl -fsSL https://raw.githubusercontent.com/$REPO/main/install.sh | sudo sh
+          \`\`\`
+
+          Same line to update an existing install. \`sudo cyadpi uninstall\` removes everything.
+
+          ## Downloads
+
+          | File | SHA-256 |
+          |---|---|
+          EOF
+          for f in sums/*.sha256; do
+            read -r sum name < "$f"
+            echo "| \`$name\` | \`$sum\` |" >> notes.md
+          done
+          gh release edit "$TAG" -R "$REPO" --title "cyadpi ${TAG#v}" --notes-file notes.md
