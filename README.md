@@ -1,8 +1,15 @@
 # cyadpi
 
+[![CI](https://github.com/kennywillbe/cyadpi/actions/workflows/ci.yml/badge.svg)](https://github.com/kennywillbe/cyadpi/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/kennywillbe/cyadpi)](https://github.com/kennywillbe/cyadpi/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+![macOS](https://img.shields.io/badge/macOS-Apple%20silicon%20%7C%20Intel-lightgrey)
+
 Gets a Mac past DPI boxes that block websites by reading the server name in
 the first packet of a connection. One binary, runs as a launchd service, no
 configuration.
+
+![cyadpi: discord.com reset by the DPI, then open with cyadpi on](docs/demo.gif)
 
 ```
 sudo cyadpi          # on, and on again after every reboot
@@ -11,6 +18,8 @@ cyadpi status
 ```
 
 ## How it works
+
+![a fake ClientHello with TTL 3 passes the DPI and expires, the real one reaches the server](docs/how-it-works.svg)
 
 When a TLS (or plain HTTP) connection starts, cyadpi sends one fake request
 ahead of the real one: same addresses, same sequence numbers, but with an IP
