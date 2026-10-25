@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" width="880" height="300" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <style>
+    .box { fill: #8b949e1f; stroke: #8b949e; stroke-width: 1.5; }
+    .dpi { fill: #d2992226; stroke: #d29922; stroke-width: 1.5; }
+    .label { fill: #8b949e; font-size: 15px; text-anchor: middle; }
+    .title { fill: #8b949e; font-size: 13px; text-anchor: middle; }
+    .fake { stroke: #f85149; stroke-width: 3; fill: none; stroke-dasharray: 8 6; }
+    .real { stroke: #3fb950; stroke-width: 3; fill: none; }
+    .fakeText { fill: #f85149; font-size: 14px; }
+    .realText { fill: #3fb950; font-size: 14px; }
+    .hop { fill: #8b949e; font-size: 12px; text-anchor: middle; }
+  </style>
+
+  <!-- nodes -->
+  <rect class="box" x="20" y="110" width="120" height="70" rx="10"/>
+  <text class="label" x="80" y="141">your Mac</text>
+  <text class="title" x="80" y="161">cyadpi</text>
+
+  <rect class="box" x="200" y="120" width="90" height="50" rx="8"/>
+  <text class="label" x="245" y="150">router</text>
+  <text class="hop" x="245" y="190">hop 1</text>
+
+  <rect class="dpi" x="350" y="110" width="120" height="70" rx="10"/>
+  <text class="label" x="410" y="141" style="fill:#d29922">ISP DPI</text>
+  <text class="title" x="410" y="161" style="fill:#d29922">reads the SNI</text>
+  <text class="hop" x="410" y="200">hop 2</text>
+
+  <rect class="box" x="740" y="110" width="120" height="70" rx="10"/>
+  <text class="label" x="800" y="141">server</text>
+  <text class="title" x="800" y="161">discord.com</text>
+
+  <!-- fake: TTL 3, dies after the DPI -->
+  <path class="fake" d="M140 128 L200 128 M290 128 L350 128 M470 128 L560 128"/>
+  <text x="560" y="135" style="fill:#f85149; font-size:22px; font-weight:bold">✕</text>
+  <text class="fakeText" x="150" y="60">1. fake ClientHello for www.w3.org, TTL 3</text>
+  <text class="fakeText" x="150" y="80" style="opacity:0.8">the DPI sees it first and lets the connection go; it expires at hop 3</text>
+
+  <!-- real: goes all the way -->
+  <path class="real" d="M140 162 L200 162 M290 162 L350 162 M470 162 L734 162"/>
+  <path d="M734 156 L744 162 L734 168 Z" fill="#3fb950"/>
+  <text class="realText" x="150" y="238">2. the real ClientHello, normal TTL</text>
+  <text class="realText" x="150" y="258" style="opacity:0.8">the DPI already made up its mind; only the server reads this one</text>
+</svg>
