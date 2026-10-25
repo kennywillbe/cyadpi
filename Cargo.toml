@@ -1,0 +1,19 @@
+[package]
+name = "cyadpi"
+version = "1.0.0"
+edition = "2024"
+description = "Gets a Mac past SNI-reading DPI with a low-TTL fake request"
+license = "Apache-2.0"
+repository = "https://github.com/kennywillbe/cyadpi"
+rust-version = "1.90"
+
+[dependencies]
+libc = "0.2.191"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+# No panic = "abort": unwinding runs Pf's Drop, so a panic on the main thread
+# still takes the pf rules down, and one in a bpf reader kills only that
+# reader (the next watch round starts a new one).

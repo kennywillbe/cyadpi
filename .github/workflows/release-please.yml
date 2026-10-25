@@ -1,0 +1,34 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  release-please:
+    name: keep the release PR up to date
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The secrets context is not dependably available in a step-level `if`.
+    env:
+      RELEASE_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+    steps:
+      # Without the token the action falls back to GITHUB_TOKEN: the `v*` tag
+      # rule refuses it, and a tag it created would not start the Release
+      # workflow anyway, so the release would have nothing built behind it.
+      - name: the release token has to be present
+        if: ${{ env.RELEASE_TOKEN == '' }}
+        run: |
+          echo "::error::RELEASE_PLEASE_TOKEN is not set."
+          exit 1
+      # One pull request collects the conventional commits since the last
+      # release. Merging it tags and releases, and only the owner can merge.
+      # Pinned by commit: this is the one workflow holding a personal token.
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ env.RELEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

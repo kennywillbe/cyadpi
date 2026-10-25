@@ -1,0 +1,48 @@
+name: Bug report
+description: A site still blocked, a site that broke, or the service misbehaving
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      placeholder: |
+        1. sudo cyadpi
+        2. curl -v https://example.com/
+        3. connection reset
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: cyadpi version
+      placeholder: "1.0.0, or a commit SHA"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: "15.4, Apple silicon"
+    validations:
+      required: true
+  - type: input
+    id: network
+    attributes:
+      label: Network
+      description: Wi-Fi or Ethernet, VPN on or off, and your ISP if you are fine sharing it.
+    validations:
+      required: true
+  - type: textarea
+    id: status
+    attributes:
+      label: cyadpi status
+      description: Output of `cyadpi status`.
+      render: shell

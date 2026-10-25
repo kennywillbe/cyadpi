@@ -1,0 +1,22 @@
+name: Feature request
+description: Propose a change
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        cyadpi is deliberately small: one trick, no configuration. Requests
+        that add flags or turn it into a proxy are unlikely to be accepted.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What does not work for you today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+    validations:
+      required: true
