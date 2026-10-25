@@ -1,43 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" width="880" height="300" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" width="980" height="520" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif">
   <style>
-    .box { fill: #8b949e1f; stroke: #8b949e; stroke-width: 1.5; }
-    .dpi { fill: #d2992226; stroke: #d29922; stroke-width: 1.5; }
-    .label { fill: #8b949e; font-size: 15px; text-anchor: middle; }
-    .title { fill: #8b949e; font-size: 13px; text-anchor: middle; }
-    .fake { stroke: #f85149; stroke-width: 3; fill: none; stroke-dasharray: 8 6; }
-    .real { stroke: #3fb950; stroke-width: 3; fill: none; }
-    .fakeText { fill: #f85149; font-size: 14px; }
-    .realText { fill: #3fb950; font-size: 14px; }
-    .hop { fill: #8b949e; font-size: 12px; text-anchor: middle; }
+    :root { --fg: #1f2328; --muted: #59636e; --line: #d1d9e0; --box: #f6f8fa; --real: #1a7f37; --fake: #cf222e; --dpi: #9a6700; --dpibox: #fff8c5; --pf: #8250df; }
+    @media (prefers-color-scheme: dark) {
+      :root { --fg: #e6edf3; --muted: #9198a1; --line: #3d444d; --box: #151b23; --real: #3fb950; --fake: #f85149; --dpi: #d29922; --dpibox: #2e2410; --pf: #ab7df8; }
+    }
+    text { fill: var(--fg); font-size: 13px; }
+    .head { font-size: 14px; font-weight: 600; text-anchor: middle; }
+    .sub { fill: var(--muted); font-size: 11.5px; text-anchor: middle; }
+    .note { fill: var(--muted); font-size: 12px; }
+    .lane { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 3 5; }
+    .box { fill: var(--box); stroke: var(--line); stroke-width: 1.5; }
+    .dpibox { fill: var(--dpibox); stroke: var(--dpi); stroke-width: 1.5; }
+    .hs { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+    .real { stroke: var(--real); stroke-width: 2.6; fill: none; }
+    .fake { stroke: var(--fake); stroke-width: 2.6; fill: none; stroke-dasharray: 9 6; }
+    .pf { stroke: var(--pf); stroke-width: 2; fill: none; stroke-dasharray: 3 4; }
+    .t-real { fill: var(--real); font-weight: 600; }
+    .t-fake { fill: var(--fake); font-weight: 600; }
+    .t-dpi { fill: var(--dpi); }
+    .t-pf { fill: var(--pf); font-weight: 600; }
+    .step { fill: var(--muted); font-size: 11px; font-weight: 700; }
   </style>
+  <defs>
+    <marker id="a-hs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker>
+    <marker id="a-real" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--real)"/></marker>
+    <marker id="a-pf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--pf)"/></marker>
+  </defs>
 
-  <!-- nodes -->
-  <rect class="box" x="20" y="110" width="120" height="70" rx="10"/>
-  <text class="label" x="80" y="141">your Mac</text>
-  <text class="title" x="80" y="161">cyadpi</text>
+  <!-- column heads -->
+  <rect class="box" x="30" y="16" width="130" height="50" rx="9"/>
+  <text class="head" x="95" y="38">app</text>
+  <text class="sub" x="95" y="55">browser, curl…</text>
 
-  <rect class="box" x="200" y="120" width="90" height="50" rx="8"/>
-  <text class="label" x="245" y="150">router</text>
-  <text class="hop" x="245" y="190">hop 1</text>
+  <rect class="box" x="190" y="16" width="150" height="50" rx="9"/>
+  <text class="head" x="265" y="38">macOS TCP + pf</text>
+  <text class="sub" x="265" y="55">holds SYN-ACKs 2 ms</text>
 
-  <rect class="dpi" x="350" y="110" width="120" height="70" rx="10"/>
-  <text class="label" x="410" y="141" style="fill:#d29922">ISP DPI</text>
-  <text class="title" x="410" y="161" style="fill:#d29922">reads the SNI</text>
-  <text class="hop" x="410" y="200">hop 2</text>
+  <rect class="box" x="370" y="16" width="140" height="50" rx="9"/>
+  <text class="head" x="440" y="38">cyadpi</text>
+  <text class="sub" x="440" y="55">bpf on the interface</text>
 
-  <rect class="box" x="740" y="110" width="120" height="70" rx="10"/>
-  <text class="label" x="800" y="141">server</text>
-  <text class="title" x="800" y="161">discord.com</text>
+  <rect class="dpibox" x="580" y="16" width="150" height="50" rx="9"/>
+  <text class="head t-dpi" x="655" y="38">ISP DPI</text>
+  <text class="sub t-dpi" x="655" y="55">hop 2, reads the SNI</text>
 
-  <!-- fake: TTL 3, dies after the DPI -->
-  <path class="fake" d="M140 128 L200 128 M290 128 L350 128 M470 128 L560 128"/>
-  <text x="560" y="135" style="fill:#f85149; font-size:22px; font-weight:bold">✕</text>
-  <text class="fakeText" x="150" y="60">1. fake ClientHello for www.w3.org, TTL 3</text>
-  <text class="fakeText" x="150" y="80" style="opacity:0.8">the DPI sees it first and lets the connection go; it expires at hop 3</text>
+  <rect class="box" x="820" y="16" width="130" height="50" rx="9"/>
+  <text class="head" x="885" y="38">server</text>
+  <text class="sub" x="885" y="55">discord.com</text>
 
-  <!-- real: goes all the way -->
-  <path class="real" d="M140 162 L200 162 M290 162 L350 162 M470 162 L734 162"/>
-  <path d="M734 156 L744 162 L734 168 Z" fill="#3fb950"/>
-  <text class="realText" x="150" y="238">2. the real ClientHello, normal TTL</text>
-  <text class="realText" x="150" y="258" style="opacity:0.8">the DPI already made up its mind; only the server reads this one</text>
+  <!-- lifelines -->
+  <line class="lane" x1="95" y1="66" x2="95" y2="400"/>
+  <line class="lane" x1="265" y1="66" x2="265" y2="400"/>
+  <line class="lane" x1="440" y1="66" x2="440" y2="400"/>
+  <line class="lane" x1="655" y1="66" x2="655" y2="400"/>
+  <line class="lane" x1="885" y1="66" x2="885" y2="400"/>
+
+  <!-- 1. SYN out, bpf keeps what it needs -->
+  <text class="step" x="20" y="104">1</text>
+  <line class="hs" x1="95" y1="100" x2="265" y2="100" marker-end="url(#a-hs)"/>
+  <text class="note" x="104" y="92">connect()</text>
+  <line class="hs" x1="265" y1="100" x2="878" y2="100" marker-end="url(#a-hs)"/>
+  <text class="note" x="742" y="92">SYN</text>
+  <circle cx="440" cy="100" r="4.5" fill="var(--muted)"/>
+  <text class="note" x="450" y="120">copies MAC, flow label, window</text>
+
+  <!-- 2. SYN-ACK: bpf sees it now, the stack 2 ms later -->
+  <text class="step" x="20" y="164">2</text>
+  <line class="hs" x1="885" y1="160" x2="447" y2="160" marker-end="url(#a-hs)"/>
+  <text class="note" x="742" y="152">SYN-ACK</text>
+  <path class="pf" d="M440 160 C 360 160, 330 238, 272 240" marker-end="url(#a-pf)"/>
+  <text class="t-pf" x="300" y="196">+2 ms</text>
+
+  <!-- 3. the fake -->
+  <text class="step" x="20" y="194">3</text>
+  <line class="fake" x1="440" y1="190" x2="770" y2="190"/>
+  <text class="t-fake" x="776" y="196" style="font-size:18px">✕</text>
+  <text class="t-fake" x="458" y="182">fake ClientHello · SNI www.w3.org · TTL 3</text>
+  <text class="note" x="672" y="214" style="fill:var(--dpi)">looks fine → allow</text>
+  <text class="t-fake" x="800" y="196" style="font-weight:400;font-size:12px">dies at hop 3</text>
+
+  <!-- 4. the stack catches up, the real request goes out -->
+  <text class="step" x="20" y="274">4</text>
+  <line class="hs" x1="265" y1="248" x2="878" y2="248" marker-end="url(#a-hs)"/>
+  <text class="note" x="742" y="240">ACK</text>
+  <line class="hs" x1="265" y1="270" x2="102" y2="270" marker-end="url(#a-hs)"/>
+  <text class="note" x="128" y="262">returns</text>
+  <line class="real" x1="95" y1="300" x2="878" y2="300" marker-end="url(#a-real)"/>
+  <text class="t-real" x="458" y="292">real ClientHello · SNI discord.com</text>
+  <text class="note" x="672" y="322" style="fill:var(--dpi)">already allowed</text>
+
+  <!-- 5. the server answers -->
+  <text class="step" x="20" y="364">5</text>
+  <line class="real" x1="885" y1="360" x2="102" y2="360" marker-end="url(#a-real)"/>
+  <text class="t-real" x="458" y="352">ServerHello, the page loads</text>
+
+  <!-- the 2 ms head start -->
+  <line x1="236" y1="160" x2="236" y2="240" stroke="var(--pf)" stroke-width="1.5"/>
+  <line x1="230" y1="160" x2="242" y2="160" stroke="var(--pf)" stroke-width="1.5"/>
+  <line x1="230" y1="240" x2="242" y2="240" stroke="var(--pf)" stroke-width="1.5"/>
+
+  <!-- footer -->
+  <line x1="20" y1="420" x2="960" y2="420" stroke="var(--line)" stroke-width="1"/>
+  <text class="note" x="20" y="446">The fake carries the same addresses, ports and sequence numbers as the real request, so the DPI box takes it as the</text>
+  <text class="note" x="20" y="464">start of the connection. The server never gets it: the TTL runs out one hop after the DPI. pf holding the SYN-ACK back</text>
+  <text class="note" x="20" y="482">for 2 ms is what makes sure the fake leaves before the app's own ClientHello, which browsers send within ~0.1 ms.</text>
 </svg>
